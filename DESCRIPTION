@@ -1,0 +1,24 @@
+Package: wrang
+Type: Package
+Title: Swiss army knife for data wrangling
+Version: 0.0.1.9000
+Authors@R: 
+    person(given = "Janko",
+           family = "Thyson",
+           role = c("aut", "cre"),
+           email = "janko@rappster.io")
+Maintainer: <janko@rappster.io>
+Description: Custom functions based upon 'dplyr' and tidyverse friends to make typical 
+    data wrangling tasks easier  
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Imports:
+    dplyr,
+    lifecycle,
+    magrittr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)

@@ -1,0 +1,57 @@
+---
+title: "Dev notebook"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Flexbilize `summarize()`
+
+```{r}
+data <- mtcars
+
+cols <- list(
+    "mpg",
+    "cyl"
+) %>% 
+    dplyr::syms()
+```
+
+Hard-coded
+
+```{r}
+data %>% 
+    dplyr::group_by(!!!cols) %>% 
+    dplyr::summarize(carb_sum = sum(carb, na.rm = TRUE)) %>% 
+    dplyr::ungroup()
+```
+
+## Programmatically
+
+### Name
+
+```{r}
+name <- "carb_sum" %>% dplyr::sym()
+fn <- rlang::expr(sum(carb, na.rm = TRUE))
+
+data %>% 
+    dplyr::group_by(!!!cols) %>% 
+    dplyr::summarize(!!name := sum(carb, na.rm = TRUE)) %>% 
+    dplyr::ungroup()
+```
+
+### Expression
+
+```{r}
+name <- "carb_sum" %>% dplyr::sym()
+expr <- rlang::expr(mean(carb, na.rm = TRUE))
+
+data %>% 
+    dplyr::group_by(!!!cols) %>% 
+    dplyr::summarize(!!name := !!expr) %>% 
+    dplyr::ungroup()
+```
