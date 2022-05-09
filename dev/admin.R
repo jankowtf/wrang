@@ -58,3 +58,4 @@ usethis::use_package("dplyr")
 # Tests -------------------------------------------------------------------
 
 usethis::use_test("wrangling")
+usethis::use_test("nse")

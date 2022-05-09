@@ -39,14 +39,12 @@ library(wrang)
 ```
 
 ``` r
-mtcars %>% wr_summarize(
+mtcars %>% dplyr::summarize(
     carb_sum = sum(carb, na.rm = TRUE),
     carb_mean = mean(carb, na.rm = TRUE)
 )
-#> # A tibble: 1 × 2
 #>   carb_sum carb_mean
-#>      <dbl>     <dbl>
-#> 1       90      2.81
+#> 1       90    2.8125
 ```
 
 ``` r
@@ -54,14 +52,12 @@ col_sum <- "carb_sum" %>% dplyr::sym()
 col_mean <- "carb_mean" %>% dplyr::sym()
 col_src <- "carb" %>% dplyr::sym()
 
-mtcars %>% wr_summarize(
+mtcars %>% dplyr::summarize(
     !!col_sum := sum(!!col_src, na.rm = TRUE),
     !!col_mean := mean(!!col_src, na.rm = TRUE)
 )
-#> # A tibble: 1 × 2
 #>   carb_sum carb_mean
-#>      <dbl>     <dbl>
-#> 1       90      2.81
+#> 1       90    2.8125
 ```
 
 ``` r
@@ -74,7 +70,7 @@ foo <- function(
     col <- dplyr::enquo(col) %>% handle_nse_input()
     col_src <- dplyr::enquo(col_src) %>% handle_nse_input()
 
-    data %>% wr_summarize(
+    data %>% dplyr::summarize(
         !!col := fn(!!col_src)
     )
 }
@@ -82,9 +78,7 @@ foo <- function(
 
 ``` r
 mtcars %>% foo()
-#> # A tibble: 1 × 1
 #>   carb_sum
-#>      <dbl>
 #> 1       90
 ```
 
@@ -94,10 +88,8 @@ mtcars %>% foo(
     col_src = "mpg", 
     fn = purrr::partial(mean, na.rm = TRUE)
 )
-#> # A tibble: 1 × 1
 #>   mpg_mean
-#>      <dbl>
-#> 1     20.1
+#> 1 20.09062
 ```
 
 ``` r
@@ -106,10 +98,8 @@ mtcars %>% foo(
     col_src = "mpg", 
     fn = purrr::partial(mean, na.rm = TRUE)
 )
-#> # A tibble: 1 × 1
 #>   mpg_mean_2
-#>        <dbl>
-#> 1       20.1
+#> 1   20.09062
 ```
 
 ``` r
@@ -118,8 +108,6 @@ mtcars %>% foo(
     col_src = mpg, 
     fn = purrr::partial(mean, na.rm = TRUE)
 )
-#> # A tibble: 1 × 1
 #>   mpg_mean_2
-#>        <dbl>
-#> 1       20.1
+#> 1   20.09062
 ```

@@ -7,9 +7,11 @@ foo <- function(
     col <- col %>% dplyr::sym()
     col_src <- col_src %>% dplyr::sym()
 
-    data %>% wr_summarize(
-        !!col := fn(!!col_src)
-    )
+    data %>%
+        tibble::as_tibble() %>%
+        dplyr::summarize(
+            !!col := fn(!!col_src)
+        )
 }
 
 bar <- function(
@@ -21,16 +23,19 @@ bar <- function(
     col <- dplyr::enquo(col) %>% handle_nse_input()
     col_src <- dplyr::enquo(col_src) %>% handle_nse_input()
 
-    data %>% wr_summarize(
-        !!col := fn(!!col_src)
-    )
+    data %>%
+        tibble::as_tibble() %>%
+        dplyr::summarize(
+            !!col := fn(!!col_src)
+        )
 }
 
 test_that("Summarize", {
-    result <- mtcars %>% wr_summarize(
-        carb_sum = sum(carb, na.rm = TRUE),
-        carb_mean = mean(carb, na.rm = TRUE)
-    )
+    result <- mtcars %>% tibble::as_tibble() %>%
+        dplyr::summarize(
+            carb_sum = sum(carb, na.rm = TRUE),
+            carb_mean = mean(carb, na.rm = TRUE)
+        )
     expected <- structure(list(carb_sum = 90, carb_mean = 2.8125), class = c("tbl_df",
         "tbl", "data.frame"), row.names = c(NA, -1L))
     expect_identical(result, expected)
@@ -41,10 +46,12 @@ test_that("Summarize NSE", {
     col_mean <- "carb_mean" %>% dplyr::sym()
     col_src <- "carb" %>% dplyr::sym()
 
-    result <- mtcars %>% wr_summarize(
-        !!col_sum := sum(!!col_src, na.rm = TRUE),
-        !!col_mean := mean(!!col_src, na.rm = TRUE)
-    )
+    result <- mtcars %>%
+        tibble::as_tibble() %>%
+        dplyr::summarize(
+            !!col_sum := sum(!!col_src, na.rm = TRUE),
+            !!col_mean := mean(!!col_src, na.rm = TRUE)
+        )
     expected <- structure(list(carb_sum = 90, carb_mean = 2.8125), class = c("tbl_df",
         "tbl", "data.frame"), row.names = c(NA, -1L))
     expect_identical(result, expected)

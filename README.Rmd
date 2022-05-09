@@ -48,7 +48,7 @@ library(wrang)
 ```
 
 ```{r}
-mtcars %>% wr_summarize(
+mtcars %>% dplyr::summarize(
     carb_sum = sum(carb, na.rm = TRUE),
     carb_mean = mean(carb, na.rm = TRUE)
 )
@@ -59,7 +59,7 @@ col_sum <- "carb_sum" %>% dplyr::sym()
 col_mean <- "carb_mean" %>% dplyr::sym()
 col_src <- "carb" %>% dplyr::sym()
 
-mtcars %>% wr_summarize(
+mtcars %>% dplyr::summarize(
     !!col_sum := sum(!!col_src, na.rm = TRUE),
     !!col_mean := mean(!!col_src, na.rm = TRUE)
 )
@@ -75,7 +75,7 @@ foo <- function(
     col <- dplyr::enquo(col) %>% handle_nse_input()
     col_src <- dplyr::enquo(col_src) %>% handle_nse_input()
 
-    data %>% wr_summarize(
+    data %>% dplyr::summarize(
         !!col := fn(!!col_src)
     )
 }
