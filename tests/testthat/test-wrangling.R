@@ -94,4 +94,3 @@ test_that("Summarize NSE (5)", {
         "tbl", "data.frame"), row.names = c(NA, -1L))
     expect_identical(result, expected)
 })
-

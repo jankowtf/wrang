@@ -35,11 +35,17 @@ remotes::install_github("rappster/wrang")
 
 ## What?
 
-Functionality for programmatic data wrangling that leverages `{dplyr}` and friends
+Functionality for programmatic data wrangling based on [{dplyr}](https://github.com/tidyverse/dplyr), [{rlang}](https://github.com/r-lib/rlang) and friends
 
 ## Why?
 
-In non-interactive use cases you typically need more programmatic approaches than hard-coding the input for data wrangling taks (e.g. column names or functions to be executed)
+In non-interactive use cases you typically need more programmatic approaches than hard-coding certain input for data wrangling tasks - e.g. column names or functions to be executed.
+
+This package tries to come up with some out-of-the-box helpers for that.
+
+### DISCLAIMER
+
+It's one of those scratch-your-own-itch things where the code base might change as flesh my ideas out.
 
 ## How?
 
@@ -47,23 +53,23 @@ In non-interactive use cases you typically need more programmatic approaches tha
 library(wrang)
 ```
 
-```{r}
-mtcars %>% dplyr::summarize(
-    carb_sum = sum(carb, na.rm = TRUE),
-    carb_mean = mean(carb, na.rm = TRUE)
-)
-```
+## Frequency table
 
 ```{r}
-col_sum <- "carb_sum" %>% dplyr::sym()
-col_mean <- "carb_mean" %>% dplyr::sym()
-col_src <- "carb" %>% dplyr::sym()
+mtcars %>% wr_freq_table(cyl)
+mtcars %>% wr_freq_table(cyl, gear, .sort = TRUE)
 
-mtcars %>% dplyr::summarize(
-    !!col_sum := sum(!!col_src, na.rm = TRUE),
-    !!col_mean := mean(!!col_src, na.rm = TRUE)
-)
+mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
+    .col_n_rel = rel, .sort = TRUE)
+
+mtcars %>% wr_freq_table(cyl, "gear")
+
+cyl_ <- dplyr::quo(cyl)
+gear_ <- dplyr::sym("gear")
+mtcars %>% wr_freq_table(!!cyl_, !!gear_)
 ```
+
+## Handling NSE input
 
 ```{r}
 foo <- function(
@@ -108,3 +114,24 @@ mtcars %>% foo(
     fn = purrr::partial(mean, na.rm = TRUE)
 )
 ```
+
+## Other
+
+```{r}
+mtcars %>% dplyr::summarize(
+    carb_sum = sum(carb, na.rm = TRUE),
+    carb_mean = mean(carb, na.rm = TRUE)
+)
+```
+
+```{r}
+col_sum <- "carb_sum" %>% dplyr::sym()
+col_mean <- "carb_mean" %>% dplyr::sym()
+col_src <- "carb" %>% dplyr::sym()
+
+mtcars %>% dplyr::summarize(
+    !!col_sum := sum(!!col_src, na.rm = TRUE),
+    !!col_mean := mean(!!col_src, na.rm = TRUE)
+)
+```
+

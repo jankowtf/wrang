@@ -1,3 +1,15 @@
+# wrang 0.0.1.9003 (2022-05-12)
+
+Fixing exports in NAMESPACE
+
+----------
+
+# wrang 0.0.1.9002 (2022-05-09)
+
+- Added `wr_freq_table()`
+
+----------
+
 # wrang 0.0.1.9001 (2022-05-09)
 
 Removed `wr_summarize()`
