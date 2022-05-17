@@ -107,6 +107,52 @@ mtcars %>% wr_freq_table(!!cyl_, !!gear_)
 #> 8     8     5     2 0.143
 ```
 
+With specifying an “dependend variable” (not satisfied with the name
+yet, likely to change)
+
+``` r
+# install.packages("palmerpenguins")
+library(palmerpenguins)
+
+penguins %>% wr_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
+#> # A tibble: 13 × 5
+#>    species   island    sex    n_abs n_rel
+#>    <fct>     <fct>     <fct>  <int> <dbl>
+#>  1 Adelie    Biscoe    female    22  0.5 
+#>  2 Adelie    Biscoe    male      22  0.5 
+#>  3 Adelie    Dream     female    27  0.48
+#>  4 Adelie    Dream     male      28  0.5 
+#>  5 Adelie    Dream     <NA>       1  0.02
+#>  6 Adelie    Torgersen female    24  0.46
+#>  7 Adelie    Torgersen male      23  0.44
+#>  8 Adelie    Torgersen <NA>       5  0.1 
+#>  9 Chinstrap Dream     female    34  0.5 
+#> 10 Chinstrap Dream     male      34  0.5 
+#> 11 Gentoo    Biscoe    female    58  0.47
+#> 12 Gentoo    Biscoe    male      61  0.49
+#> 13 Gentoo    Biscoe    <NA>       5  0.04
+```
+
+Check that relative counts add up to `1`
+
+``` r
+penguins %>% 
+    wr_freq_table(species, island, var_dep = sex, 
+        .digits_n_rel = 2, .ungroup = FALSE) %>%
+    dplyr::summarise(n_rel_total = sum(n_rel)) %>% 
+    dplyr::ungroup()
+#> `summarise()` has grouped output by 'species'. You can override using the
+#> `.groups` argument.
+#> # A tibble: 5 × 3
+#>   species   island    n_rel_total
+#>   <fct>     <fct>           <dbl>
+#> 1 Adelie    Biscoe              1
+#> 2 Adelie    Dream               1
+#> 3 Adelie    Torgersen           1
+#> 4 Chinstrap Dream               1
+#> 5 Gentoo    Biscoe              1
+```
+
 ## Handling NSE input
 
 ``` r
@@ -118,7 +164,7 @@ foo <- function(
 ) {
     col <- dplyr::enquo(col) %>% handle_nse_input()
     col_src <- dplyr::enquo(col_src) %>% handle_nse_input()
-
+    
     data %>% dplyr::summarize(
         !!col := fn(!!col_src)
     )
