@@ -7,7 +7,7 @@
 handle_nse_input(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{[\link{character} or \link{name} or \link{call}]}
 }
 \value{
 

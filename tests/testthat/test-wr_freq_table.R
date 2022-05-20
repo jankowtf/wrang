@@ -16,10 +16,27 @@ test_that("Freq table: sorted", {
     expect_identical(result, expected)
 })
 
-test_that("Freq table: different NSE inputs for summarize", {
+test_that("Freq table: different NSE inputs (1)", {
     result <- mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
         .col_n_rel = rel, .sort = TRUE)
     expected <- structure(list(cyl = c(8, 4, 6), n = c(14L, 11L, 7L), rel = c(0.4375,
+        0.34375, 0.21875)), row.names = c(NA, -3L), class = c("tbl_df",
+            "tbl", "data.frame"))
+    expect_identical(result, expected)
+})
+
+test_that("Freq table: different NSE inputs (2)", {
+    # skip("It's complicated... (NSE-wise). Works as 'stand-alone' test")
+
+    foo <- function(data = mtcars) {
+        .col_n_abs <- "n"
+        .col_n_rel <- "freq"
+        data %>% wr_freq_table(cyl, .col_n_abs = rlang::eval_tidy(.col_n_abs),
+            .col_n_rel = rlang::eval_tidy(.col_n_rel), .sort = TRUE)
+    }
+    result <- foo()
+
+    expected <- structure(list(cyl = c(8, 4, 6), n = c(14L, 11L, 7L), freq = c(0.4375,
         0.34375, 0.21875)), row.names = c(NA, -3L), class = c("tbl_df",
             "tbl", "data.frame"))
     expect_identical(result, expected)

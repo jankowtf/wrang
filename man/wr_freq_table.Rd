@@ -9,7 +9,9 @@ wr_freq_table(
   ...,
   .sort = FALSE,
   .col_n_abs = "n_abs",
-  .col_n_rel = "n_rel"
+  .col_n_rel = "n_rel",
+  .digits_n_rel = 0,
+  .ungroup = TRUE
 )
 }
 \arguments{
@@ -22,6 +24,13 @@ wr_freq_table(
 \item{.col_n_abs}{[\link{symbol} or \link{character}] Column name for absolute count}
 
 \item{.col_n_rel}{[\link{symbol} or \link{character}] Column name for relative count}
+
+\item{.digits_n_rel}{[\link{integer}] Number of digits for rounding. \code{0} means "no
+rounding"}
+
+\item{.ungroup}{[\link{logical}] Ungroup data frame yes/no}
+
+\item{var_dep}{[\link{symbol} or \link{character}]}
 }
 \value{
 
@@ -41,4 +50,14 @@ mtcars \%>\% wr_freq_table(cyl, "gear")
 cyl_ <- dplyr::quo(cyl)
 gear_ <- dplyr::sym("gear")
 mtcars \%>\% wr_freq_table(!!cyl_, !!gear_)
+
+library(palmerpenguins)
+penguins \%>\% wr_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
+
+Check that relative counts add up to `1`
+penguins \%>\%
+    wr_freq_table(species, island, var_dep = sex,
+        .digits_n_rel = 2, .ungroup = FALSE) \%>\%
+    dplyr::summarise(n_rel_total = sum(n_rel)) \%>\%
+    dplyr::ungroup()
 }

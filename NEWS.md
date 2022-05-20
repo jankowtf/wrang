@@ -1,3 +1,15 @@
+# wrang 0.0.1.9006 (2022-05-20)
+
+NSE improvements for column names
+
+- Fixed `handle_nse_input()` to allow for column names that are passed as
+variables that contain the **actual** value (be it a string or a name/symbol).
+These cases have previously been handled as if the variable itself should become
+the name. Classical NSE topic. Not solved super nicely yet, but it'll do for the
+moment
+
+----------
+
 # wrang 0.0.1.9005 (2022-05-20)
 
 Roll back unnecessary dep_var
