@@ -38,7 +38,6 @@
 wr_freq_table <- function(
     data,
     ...,
-    var_dep = character(),
     .sort = FALSE,
     .col_n_abs = "n_abs",
     .col_n_rel = "n_rel",
@@ -47,21 +46,13 @@ wr_freq_table <- function(
 ) {
     cols <- dplyr::enquos(...) %>%
         purrr::map(~.x %>% handle_nse_input)
-    col_var_dep <- dplyr::enquo(var_dep)
-    var_dep_missing <- missing(var_dep)
 
     col_n_abs <- dplyr::enquo(.col_n_abs) %>% handle_nse_input()
     col_n_rel <- dplyr::enquo(.col_n_rel) %>% handle_nse_input()
 
-    data %>%
-        dplyr::group_by(!!!cols) %>% {
-            if (!var_dep_missing) {
-                dplyr::count(., !!col_var_dep) %>%
-                    dplyr::rename(!!col_n_abs := n)
-            } else {
-                dplyr::summarise(., !!col_n_abs := dplyr::n())
-            }
-        } %>%
+    out <- data %>%
+        dplyr::group_by(!!!cols) %>%
+        dplyr::summarise(!!col_n_abs := dplyr::n()) %>%
         dplyr::mutate(!!col_n_rel := !!col_n_abs / sum(!!col_n_abs)) %>% {
             if (.sort) {
                 dplyr::arrange(., dplyr::desc(!!col_n_abs), .by_group = TRUE)

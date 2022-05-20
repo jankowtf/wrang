@@ -1,4 +1,16 @@
+# wrang 0.0.1.9005 (2022-05-20)
+
+Roll back unnecessary dep_var
+
+- Removed `dev_par` in `wr_freq_table()` as it was unnecessary
+
+----------
+
 # wrang 0.0.1.9004 (2022-05-17)
+
+Added dev_var, .digits_n_rel and .grouping
+
+- Extended `wr_freq_table()`
 
 ----------
 

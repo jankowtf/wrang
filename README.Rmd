@@ -75,19 +75,18 @@ With specifying an "dependend variable" (not satisfied with the name yet, likely
 # install.packages("palmerpenguins")
 library(palmerpenguins)
 
-penguins %>% wr_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
+penguins %>% wr_freq_table(species, island, sex, .digits_n_rel = 2)
 ```
 
 Check that relative counts add up to `1`
 
 ```{r}
 penguins %>% 
-    wr_freq_table(species, island, var_dep = sex, 
+    wr_freq_table(species, island, sex, 
         .digits_n_rel = 2, .ungroup = FALSE) %>%
     dplyr::summarise(n_rel_total = sum(n_rel)) %>% 
     dplyr::ungroup()
 ```
-
 
 ## Handling NSE input
 
