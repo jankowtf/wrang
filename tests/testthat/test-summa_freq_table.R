@@ -78,7 +78,8 @@ test_that("Freq table: different NSE inputs for grouping", {
 })
 
 test_that("Digits", {
-    result <- mtcars %>% summa_freq_table(cyl, gear, .digits_n_rel = 2)
+    result <- mtcars %>% summa_freq_table(cyl, gear, .round_n_rel = TRUE,
+        .digits_n_rel = 2)
     expected <- structure(list(cyl = c(4, 4, 4, 6, 6, 6, 8, 8), gear = c(3, 4,
         5, 3, 4, 5, 3, 5), n_abs = c(1L, 8L, 2L, 2L, 4L, 1L, 12L, 2L),
         n_rel = c(0.09, 0.73, 0.18, 0.29, 0.57, 0.14, 0.86, 0.14)), row.names = c(NA,
@@ -91,3 +92,4 @@ test_that("Digits", {
         "tbl", "data.frame"), row.names = c(NA, -3L))
     expect_equal(result, expected, ignore_attr = TRUE)
 })
+

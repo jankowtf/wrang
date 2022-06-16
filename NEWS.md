@@ -1,3 +1,13 @@
+# wrang 0.0.1.9007 (2022-06-17)
+
+Better solution for XE
+
+- Modified `handle_nse_input()` to allow for a better handling of the three main input scenarios: `names`, `characters` and `symbols`
+- Updated roxygen doc
+- Updated unit tests
+
+----------
+
 # wrang 0.0.1.9007 (2022-06-16)
 
 Consistent naming schema
