@@ -2,11 +2,13 @@
 #'
 #' @param x [[character] or [name] or [call]]
 #' @param env [[environment]] Caller environment
+#' @param eval
 #'
 #' @return
 handle_nse_input <- function(
     x,
-    env = rlang::caller_env()
+    env = rlang::caller_env(),
+    eval = FALSE
 ) {
     value <- rlang::quo_squash(x)
 
@@ -20,6 +22,11 @@ handle_nse_input <- function(
             res %>% dplyr::sym()
         }
     } else {
-        x
+        if (eval) {
+            try(rlang::eval_tidy(x, env = env), silent = TRUE) %>%
+                handle_nse_input(env = env)
+        } else {
+            x
+        }
     }
 }

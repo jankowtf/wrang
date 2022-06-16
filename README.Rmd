@@ -56,17 +56,17 @@ library(wrang)
 ## Frequency table
 
 ```{r}
-mtcars %>% wr_freq_table(cyl)
-mtcars %>% wr_freq_table(cyl, gear, .sort = TRUE)
+mtcars %>% summa_freq_table(cyl)
+mtcars %>% summa_freq_table(cyl, gear, .sort = TRUE)
 
-mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
+mtcars %>% summa_freq_table(cyl, .col_n_abs = "n",
     .col_n_rel = rel, .sort = TRUE)
 
-mtcars %>% wr_freq_table(cyl, "gear")
+mtcars %>% summa_freq_table(cyl, "gear")
 
 cyl_ <- dplyr::quo(cyl)
 gear_ <- dplyr::sym("gear")
-mtcars %>% wr_freq_table(!!cyl_, !!gear_)
+mtcars %>% summa_freq_table(!!cyl_, !!gear_)
 ```
 
 With specifying an "dependend variable" (not satisfied with the name yet, likely to change)
@@ -75,14 +75,14 @@ With specifying an "dependend variable" (not satisfied with the name yet, likely
 # install.packages("palmerpenguins")
 library(palmerpenguins)
 
-penguins %>% wr_freq_table(species, island, sex, .digits_n_rel = 2)
+penguins %>% summa_freq_table(species, island, sex, .digits_n_rel = 2)
 ```
 
 Check that relative counts add up to `1`
 
 ```{r}
 penguins %>% 
-    wr_freq_table(species, island, sex, 
+    summa_freq_table(species, island, sex, 
         .digits_n_rel = 2, .ungroup = FALSE) %>%
     dplyr::summarise(n_rel_total = sum(n_rel)) %>% 
     dplyr::ungroup()

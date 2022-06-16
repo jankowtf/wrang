@@ -14,28 +14,28 @@
 #' @export
 #'
 #' @examples
-#' mtcars %>% wr_freq_table(cyl)
-#' mtcars %>% wr_freq_table(cyl, gear, .sort = TRUE)
+#' mtcars %>% summa_freq_table(cyl)
+#' mtcars %>% summa_freq_table(cyl, gear, .sort = TRUE)
 #'
-#' mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
+#' mtcars %>% summa_freq_table(cyl, .col_n_abs = "n",
 #'     .col_n_rel = rel, .sort = TRUE)
 #'
-#' mtcars %>% wr_freq_table(cyl, "gear")
+#' mtcars %>% summa_freq_table(cyl, "gear")
 #'
 #' cyl_ <- dplyr::quo(cyl)
 #' gear_ <- dplyr::sym("gear")
-#' mtcars %>% wr_freq_table(!!cyl_, !!gear_)
+#' mtcars %>% summa_freq_table(!!cyl_, !!gear_)
 #'
 #' library(palmerpenguins)
-#' penguins %>% wr_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
+#' penguins %>% summa_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
 #'
 #' Check that relative counts add up to `1`
 #' penguins %>%
-#'     wr_freq_table(species, island, var_dep = sex,
+#'     summa_freq_table(species, island, var_dep = sex,
 #'         .digits_n_rel = 2, .ungroup = FALSE) %>%
 #'     dplyr::summarise(n_rel_total = sum(n_rel)) %>%
 #'     dplyr::ungroup()
-wr_freq_table <- function(
+summa_freq_table <- function(
     data,
     ...,
     .sort = FALSE,
@@ -53,7 +53,15 @@ wr_freq_table <- function(
     out <- data %>%
         dplyr::group_by(!!!cols) %>%
         dplyr::summarise(!!col_n_abs := dplyr::n()) %>%
-        dplyr::mutate(!!col_n_rel := !!col_n_abs / sum(!!col_n_abs)) %>% {
+        dplyr::mutate(!!col_n_rel := !!col_n_abs / sum(!!col_n_abs)) %>%
+        add_count_relative(
+            .col_n_abs = .col_n_abs,
+            .col_n_rel = .col_n_rel,
+            .digits_n_rel = .digits_n_rel,
+            .ungroup = FALSE,
+            .eval = TRUE
+        ) %>%
+        {
             if (.sort) {
                 dplyr::arrange(., dplyr::desc(!!col_n_abs), .by_group = TRUE)
             } else {
@@ -65,9 +73,58 @@ wr_freq_table <- function(
             } else {
                 .
             }
-        } %>% {
+        } #%>%
+        # {
+        #     if (.digits_n_rel > 0) {
+        #         dplyr::mutate(., !!col_n_rel := !!col_n_rel %>% round(.digits_n_rel))
+        #     } else {
+        #         .
+        #     }
+        # }
+}
+
+# Add ---------------------------------------------------------------------
+
+add_count_relative <- function(
+    data,
+    ...,
+    .col_n_abs = "n_abs",
+    .col_n_rel = "n_rel",
+    .digits_n_rel = 0,
+    .ungroup = TRUE,
+    .eval = FALSE
+) {
+    grouping_vars_expr <- dplyr::quos(...)
+
+    col_n_abs <- dplyr::enquo(.col_n_abs) %>% handle_nse_input(eval = .eval)
+    col_n_rel <- dplyr::enquo(.col_n_rel) %>% handle_nse_input(eval = .eval)
+
+    data %>%
+        {
+            if(inherits(., "grouped_df")) {
+                .
+            } else {
+                dplyr::group_by(., !!! grouping_vars_expr)
+            }
+        } %>%
+        dplyr::mutate(
+            # !!col_n_rel := if (.digits_n_rel > 0) {
+            #     ((!! col_n_abs) / sum(!! col_n_abs)) %>% round(.digits_n_rel)
+            # } else {
+            #     (!! col_n_abs) / sum(!! col_n_abs)
+            # }
+            !!col_n_rel := (!! col_n_abs) / sum(!! col_n_abs)
+        ) %>%
+        {
             if (.digits_n_rel > 0) {
-                dplyr::mutate(., !!col_n_rel := !!col_n_rel %>% round(.digits_n_rel))
+                dplyr::mutate(., ((!! col_n_abs) / sum(!! col_n_abs)) %>% round(.digits_n_rel))
+            } else {
+                .
+            }
+        } %>%
+        {
+            if (.ungroup) {
+                dplyr::ungroup(.)
             } else {
                 .
             }

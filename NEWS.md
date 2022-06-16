@@ -1,3 +1,17 @@
+# wrang 0.0.1.9007 (2022-06-16)
+
+Consistent naming schema
+
+- Renamed certain functions to switch to a more consistent general naming
+schema:
+    - `summa_*` for all functions that summarize information
+    - `add_*` for all functions that add columns to a tibble
+- Added `add_count_relative()`
+- Modified `handle_nse_input()` to allow for proper NSE evaluation in nested
+function calls (experimental)
+
+----------
+
 # wrang 0.0.1.9006 (2022-05-20)
 
 NSE improvements for column names
@@ -14,7 +28,7 @@ moment
 
 Roll back unnecessary dep_var
 
-- Removed `dev_par` in `wr_freq_table()` as it was unnecessary
+- Removed `dev_par` in `summa_freq_table()` as it was unnecessary
 
 ----------
 
@@ -22,7 +36,7 @@ Roll back unnecessary dep_var
 
 Added dev_var, .digits_n_rel and .grouping
 
-- Extended `wr_freq_table()`
+- Extended `summa_freq_table()`
 
 ----------
 
@@ -34,15 +48,15 @@ Fixing exports in NAMESPACE
 
 # wrang 0.0.1.9002 (2022-05-09)
 
-- Added `wr_freq_table()`
+- Added `summa_freq_table()`
 
 ----------
 
 # wrang 0.0.1.9001 (2022-05-09)
 
-Removed `wr_summarize()`
+Removed `summarize()`
 
-- Removded `wr_summariz()` as it didn't really provide additional features over `dplyr::summarize()`
+- Removded `summariz()` as it didn't really provide additional features over `dplyr::summarize()`
 - Unit test for `handle_nse_input()`
 
 ----------

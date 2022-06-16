@@ -1,7 +1,7 @@
 # Freq table --------------------------------------------------------------
 
 test_that("Freq table", {
-    result <- mtcars %>% wr_freq_table(cyl)
+    result <- mtcars %>% summa_freq_table(cyl)
     expected <- structure(list(cyl = c(4, 6, 8), n_abs = c(11L, 7L, 14L), n_rel = c(0.34375,
         0.21875, 0.4375)), row.names = c(NA, -3L), class = c("tbl_df",
             "tbl", "data.frame"))
@@ -9,7 +9,7 @@ test_that("Freq table", {
 })
 
 test_that("Freq table: sorted", {
-    result <- mtcars %>% wr_freq_table(cyl, .sort = TRUE)
+    result <- mtcars %>% summa_freq_table(cyl, .sort = TRUE)
     expected <- structure(list(cyl = c(8, 4, 6), n_abs = c(14L, 11L, 7L), n_rel = c(0.4375,
         0.34375, 0.21875)), row.names = c(NA, -3L), class = c("tbl_df",
             "tbl", "data.frame"))
@@ -17,7 +17,7 @@ test_that("Freq table: sorted", {
 })
 
 test_that("Freq table: different NSE inputs (1)", {
-    result <- mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
+    result <- mtcars %>% summa_freq_table(cyl, .col_n_abs = "n",
         .col_n_rel = rel, .sort = TRUE)
     expected <- structure(list(cyl = c(8, 4, 6), n = c(14L, 11L, 7L), rel = c(0.4375,
         0.34375, 0.21875)), row.names = c(NA, -3L), class = c("tbl_df",
@@ -31,7 +31,7 @@ test_that("Freq table: different NSE inputs (2)", {
     foo <- function(data = mtcars) {
         .col_n_abs <- "n"
         .col_n_rel <- "freq"
-        data %>% wr_freq_table(cyl, .col_n_abs = rlang::eval_tidy(.col_n_abs),
+        data %>% summa_freq_table(cyl, .col_n_abs = rlang::eval_tidy(.col_n_abs),
             .col_n_rel = rlang::eval_tidy(.col_n_rel), .sort = TRUE)
     }
     result <- foo()
@@ -43,7 +43,7 @@ test_that("Freq table: different NSE inputs (2)", {
 })
 
 test_that("Freq table: multiple grouping inputs", {
-    result <- mtcars %>% wr_freq_table(cyl, gear) %>%
+    result <- mtcars %>% summa_freq_table(cyl, gear) %>%
         dplyr::mutate(n_rel = n_rel %>% round(4))
     expected <- structure(list(cyl = c(4, 4, 4, 6, 6, 6, 8, 8), gear = c(3, 4,
         5, 3, 4, 5, 3, 5), n_abs = c(1L, 8L, 2L, 2L, 4L, 1L, 12L, 2L),
@@ -56,7 +56,7 @@ test_that("Freq table: multiple grouping inputs", {
 test_that("Freq table: different NSE inputs for grouping", {
     cyl_ <- dplyr::quo(cyl)
     gear_ <- dplyr::sym("gear")
-    result <- mtcars %>% wr_freq_table(!!cyl_, !!gear_) %>%
+    result <- mtcars %>% summa_freq_table(!!cyl_, !!gear_) %>%
         dplyr::mutate(n_rel = n_rel %>% round(4))
     expected <- structure(list(cyl = c(4, 4, 4, 6, 6, 6, 8, 8), gear = c(3, 4,
         5, 3, 4, 5, 3, 5), n_abs = c(1L, 8L, 2L, 2L, 4L, 1L, 12L, 2L),
@@ -67,7 +67,7 @@ test_that("Freq table: different NSE inputs for grouping", {
 })
 
 test_that("Freq table: different NSE inputs for grouping", {
-    result <- mtcars %>% wr_freq_table(cyl, "gear") %>%
+    result <- mtcars %>% summa_freq_table(cyl, "gear") %>%
         dplyr::mutate(n_rel = n_rel %>% round(4))
     expected <- structure(list(cyl = c(4, 4, 4, 6, 6, 6, 8, 8), gear = c(3, 4,
         5, 3, 4, 5, 3, 5), n_abs = c(1L, 8L, 2L, 2L, 4L, 1L, 12L, 2L),
@@ -78,7 +78,7 @@ test_that("Freq table: different NSE inputs for grouping", {
 })
 
 test_that("Digits", {
-    result <- mtcars %>% wr_freq_table(cyl, gear, .digits_n_rel = 2)
+    result <- mtcars %>% summa_freq_table(cyl, gear, .digits_n_rel = 2)
     expected <- structure(list(cyl = c(4, 4, 4, 6, 6, 6, 8, 8), gear = c(3, 4,
         5, 3, 4, 5, 3, 5), n_abs = c(1L, 8L, 2L, 2L, 4L, 1L, 12L, 2L),
         n_rel = c(0.09, 0.73, 0.18, 0.29, 0.57, 0.14, 0.86, 0.14)), row.names = c(NA,

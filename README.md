@@ -49,14 +49,14 @@ library(wrang)
 ## Frequency table
 
 ``` r
-mtcars %>% wr_freq_table(cyl)
+mtcars %>% summa_freq_table(cyl)
 #> # A tibble: 3 × 3
 #>     cyl n_abs n_rel
 #>   <dbl> <int> <dbl>
 #> 1     4    11 0.344
 #> 2     6     7 0.219
 #> 3     8    14 0.438
-mtcars %>% wr_freq_table(cyl, gear, .sort = TRUE)
+mtcars %>% summa_freq_table(cyl, gear, .sort = TRUE)
 #> # A tibble: 8 × 4
 #>     cyl  gear n_abs  n_rel
 #>   <dbl> <dbl> <int>  <dbl>
@@ -69,7 +69,7 @@ mtcars %>% wr_freq_table(cyl, gear, .sort = TRUE)
 #> 7     8     3    12 0.857 
 #> 8     8     5     2 0.143
 
-mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
+mtcars %>% summa_freq_table(cyl, .col_n_abs = "n",
     .col_n_rel = rel, .sort = TRUE)
 #> # A tibble: 3 × 3
 #>     cyl     n   rel
@@ -78,7 +78,7 @@ mtcars %>% wr_freq_table(cyl, .col_n_abs = "n",
 #> 2     4    11 0.344
 #> 3     6     7 0.219
 
-mtcars %>% wr_freq_table(cyl, "gear")
+mtcars %>% summa_freq_table(cyl, "gear")
 #> # A tibble: 8 × 4
 #>     cyl  gear n_abs  n_rel
 #>   <dbl> <dbl> <int>  <dbl>
@@ -93,7 +93,7 @@ mtcars %>% wr_freq_table(cyl, "gear")
 
 cyl_ <- dplyr::quo(cyl)
 gear_ <- dplyr::sym("gear")
-mtcars %>% wr_freq_table(!!cyl_, !!gear_)
+mtcars %>% summa_freq_table(!!cyl_, !!gear_)
 #> # A tibble: 8 × 4
 #>     cyl  gear n_abs  n_rel
 #>   <dbl> <dbl> <int>  <dbl>
@@ -114,7 +114,7 @@ yet, likely to change)
 # install.packages("palmerpenguins")
 library(palmerpenguins)
 
-penguins %>% wr_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
+penguins %>% summa_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
 #> # A tibble: 13 × 5
 #>    species   island    sex    n_abs n_rel
 #>    <fct>     <fct>     <fct>  <int> <dbl>
@@ -137,7 +137,7 @@ Check that relative counts add up to `1`
 
 ``` r
 penguins %>% 
-    wr_freq_table(species, island, var_dep = sex, 
+    summa_freq_table(species, island, var_dep = sex, 
         .digits_n_rel = 2, .ungroup = FALSE) %>%
     dplyr::summarise(n_rel_total = sum(n_rel)) %>% 
     dplyr::ungroup()
