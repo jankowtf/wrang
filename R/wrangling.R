@@ -52,6 +52,10 @@ summa_freq_table <- function(
             purrr::map(~.x %>% handle_nse_input)
     }
 
+    if (!length(cols)) {
+        cols <- data %>% names() %>% dplyr::syms()
+    }
+
     col_n_abs <- dplyr::enquo(.col_n_abs) %>% handle_nse_input()
     col_n_rel <- dplyr::enquo(.col_n_rel) %>% handle_nse_input()
 

@@ -1,3 +1,11 @@
+# wrang 0.0.1.9010 (2022-08-26)
+
+Ungrouped input
+
+- Modified `summa_freq_table()`: in case of ungrouped input `cols = names(data)`
+
+----------
+
 # wrang 0.0.1.9009 (2022-08-26)
 
 Group var detection
