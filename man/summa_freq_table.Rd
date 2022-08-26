@@ -10,14 +10,15 @@ summa_freq_table(
   .sort = FALSE,
   .col_n_abs = "n_abs",
   .col_n_rel = "n_rel",
+  .round_n_rel = FALSE,
   .digits_n_rel = 0,
   .ungroup = TRUE
 )
 }
 \arguments{
-\item{data}{Data}
+\item{data}{[\link{tibble}] Data}
 
-\item{...}{[\link{symbol}, \link{character}]}
+\item{...}{[\link{name}, \link{character} or \link{symbol}] Column names}
 
 \item{.sort}{[\link{logical}] Should results be sorted yes/no}
 
@@ -25,12 +26,11 @@ summa_freq_table(
 
 \item{.col_n_rel}{[\link{symbol} or \link{character}] Column name for relative count}
 
-\item{.digits_n_rel}{[\link{integer}] Number of digits for rounding. \code{0} means "no
-rounding"}
+\item{.round_n_rel}{[\link{logical}] Round \code{n_rel} yes/no}
+
+\item{.digits_n_rel}{[\link{integer}] Number of digits for rounding}
 
 \item{.ungroup}{[\link{logical}] Ungroup data frame yes/no}
-
-\item{var_dep}{[\link{symbol} or \link{character}]}
 }
 \value{
 
@@ -54,7 +54,7 @@ mtcars \%>\% summa_freq_table(!!cyl_, !!gear_)
 library(palmerpenguins)
 penguins \%>\% summa_freq_table(species, island, var_dep = sex, .digits_n_rel = 2)
 
-Check that relative counts add up to `1`
+# Check that relative counts add up to `1`
 penguins \%>\%
     summa_freq_table(species, island, var_dep = sex,
         .digits_n_rel = 2, .ungroup = FALSE) \%>\%

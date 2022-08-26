@@ -1,3 +1,11 @@
+# wrang 0.0.1.9009 (2022-08-26)
+
+Group var detection
+
+- Modified `summa_freq_table()`: group vars are detected via `dplyr::group_vars()`
+
+----------
+
 # wrang 0.0.1.9008 (2022-06-16)
 
 Better solution for XE

@@ -1,7 +1,7 @@
 Package: wrang
 Type: Package
 Title: Swiss army knife for data wrangling
-Version: 0.0.1.9008
+Version: 0.0.1.9009
 Authors@R: 
     person(given = "Janko",
            family = "Thyson",

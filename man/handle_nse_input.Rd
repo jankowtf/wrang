@@ -4,14 +4,30 @@
 \alias{handle_nse_input}
 \title{Handle NSE input}
 \usage{
-handle_nse_input(x)
+handle_nse_input(x, env = rlang::caller_env())
 }
 \arguments{
 \item{x}{[\link{character} or \link{name} or \link{call}]}
+
+\item{env}{[\link{environment}] Caller environment}
 }
 \value{
 
 }
 \description{
 Handle NSE input
+}
+\examples{
+dplyr::quo("mpg") \%>\% handle_nse_input()
+dplyr::quo(mpg) \%>\% handle_nse_input()
+col <- "mpg"
+col \%>\% handle_nse_input()
+foo <- function(col, ...) {
+    dplyr::enquo(col) \%>\% handle_nse_input(...)
+}
+
+foo(mpg)
+foo("mpg")
+col <- "mpg"
+result <- foo(col)
 }
